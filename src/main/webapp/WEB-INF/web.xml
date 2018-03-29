@@ -1,0 +1,105 @@
+<web-app
+	version="2.3">
+
+	<display-name>Secure Bank</display-name>
+
+	<servlet>
+		<servlet-name>dispatcher</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/config/spring-servlet.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>/WEB-INF/assets/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>dispatcher</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+	<!-- Loads Spring Security config file -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			/WEB-INF/config/spring-security.xml
+			/WEB-INF/config/spring-database.xml
+			/WEB-INF/config/pdf-views.xml
+		</param-value>
+	</context-param>
+
+	<!-- Spring Security -->
+	<filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+    
+    <session-config>  
+        <!-- Default to 5 minute session timeouts -->  
+        <session-timeout>5</session-timeout>  
+        <tracking-mode>COOKIE</tracking-mode>
+    </session-config>  
+
+	<error-page>
+		<!-- Missing login -->
+		<error-code>401</error-code>
+		<location>/error.jsp</location>
+	</error-page>
+	<error-page>
+		<!-- Forbidden directory listing -->
+		<error-code>403</error-code>
+		<location>/error.jsp</location>
+	</error-page>
+	<error-page>
+		<!-- Missing resource -->
+		<error-code>404</error-code>
+		<location>/error.jsp</location>
+	</error-page>
+	<error-page>
+		<!-- Uncaught exception -->
+		<error-code>500</error-code>
+		<location>/error.jsp</location>
+	</error-page>
+	<error-page>
+		<!-- Unsupported servlet method -->
+		<error-code>503</error-code>
+		<location>/error.jsp</location>
+	</error-page>
+	
+	
+	
+	<!--  Cross site scripting protection -->
+	<context-param>
+    <param-name>defaultHtmlEscape</param-name>
+    <param-value>true</param-value>
+	</context-param>
+
+ 	<!-- Enable HTTPS -->
+<!--	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>SBS Application</web-resource-name>
+			<url-pattern>/*</url-pattern>
+		</web-resource-collection>
+		Transport guarantee is used for http/https To allow http traffic use 
+			NONE To restrict to just HTTPS use CONFIDENTIAL
+		<user-data-constraint>
+			<transport-guarantee>CONFIDENTIAL</transport-guarantee>
+		</user-data-constraint>
+	</security-constraint> -->
+
+</web-app>
